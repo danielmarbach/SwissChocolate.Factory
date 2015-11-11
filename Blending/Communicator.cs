@@ -7,7 +7,7 @@ namespace Blending
     public class Communicator
     {
         [ThreadStatic]
-        static readonly ChannelFactory<IVanillaService> factory = new ChannelFactory<IVanillaService>();
+        static readonly ChannelFactory<IVanillaService> factory = new ChannelFactory<IVanillaService>(new NetTcpBinding());
 
         public Task<Vanilla> AcquireVanilla()
         {

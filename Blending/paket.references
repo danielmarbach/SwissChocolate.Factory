@@ -1,1 +1,3 @@
 NServiceBus
+NServiceBus.StructureMap
+EntityFramework.SqlServerCompact

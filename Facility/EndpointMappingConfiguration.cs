@@ -33,6 +33,18 @@ namespace Facility
                     AssemblyName = "Messages",
                     TypeFullName = typeof (BeansGround).FullName,
                     Endpoint = "Chocolate.Grinding"
+                },
+                new MessageEndpointMapping
+                {
+                    AssemblyName = "Messages",
+                    TypeFullName = typeof (BlendChocolate).FullName,
+                    Endpoint = "Chocolate.Blending"
+                },
+                new MessageEndpointMapping
+                {
+                    AssemblyName = "Messages",
+                    TypeFullName = typeof (ChocolateBlended).FullName,
+                    Endpoint = "Chocolate.Blending"
                 }
             };
 

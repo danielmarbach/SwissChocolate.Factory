@@ -2,3 +2,5 @@ source "https://nuget.org/api/v2"
 source "https://www.myget.org/F/particular/"
 
 nuget NServiceBus ~> 5.2.8
+nuget NServiceBus.StructureMap
+nuget EntityFramework.SqlServerCompact ~> 6

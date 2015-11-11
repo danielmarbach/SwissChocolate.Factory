@@ -1,3 +1,4 @@
+using System;
 using NServiceBus;
 
 namespace Blending
@@ -5,9 +6,11 @@ namespace Blending
     public class AcquireVanillaHandler : IHandleMessages<AcquireVanilla>
     {
         private readonly Communicator communicator;
+        private readonly VanillaContext context;
 
-        public AcquireVanillaHandler(Communicator communicator)
+        public AcquireVanillaHandler(Communicator communicator, VanillaContext context)
         {
+            this.context = context;
             this.communicator = communicator;
         }
 
@@ -17,7 +20,16 @@ namespace Blending
         {
             var vanilla = communicator.AcquireVanilla().Result;
 
-            Bus.Reply(new VanillaAcquired { LotNumber = message.LotNumber, Vanilla = vanilla });
+            using (var transaction = context.Database.BeginTransaction())
+            {
+                context.Usages.Add(new VanillaUsage(DateTimeOffset.UtcNow));
+
+                Bus.Reply(new VanillaAcquired {LotNumber = message.LotNumber, Vanilla = vanilla});
+
+                context.SaveChanges();
+
+                transaction.Commit();
+            }
         }
     }
 }
