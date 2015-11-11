@@ -7,7 +7,7 @@ namespace Grinding
     {
         public void Handle(ProduceCocoaSolid message)
         {
-            Console.WriteLine("Produced cocoa solid");
+            Console.WriteLine($"['{message.LotNumber}'] Produced cocoa solid");
         }
     }
 }
