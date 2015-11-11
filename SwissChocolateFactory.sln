@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Roasting", "Roaster\Roastin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grinding", "Grinder\Grinding.csproj", "{5EE78073-40F1-49BC-AB8C-58F260003FBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conching", "Conching\Conching.csproj", "{2C32ABB7-D51B-4C35-B96D-7406D19A0840}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blending", "Blending\Blending.csproj", "{76EA4D52-0A69-454B-9DA8-2384814F0279}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facility", "Facility\Facility.csproj", "{FE7B95B1-35B5-48F5-9798-431A8192A1EB}"
@@ -33,10 +31,6 @@ Global
 		{5EE78073-40F1-49BC-AB8C-58F260003FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE78073-40F1-49BC-AB8C-58F260003FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE78073-40F1-49BC-AB8C-58F260003FBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C32ABB7-D51B-4C35-B96D-7406D19A0840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C32ABB7-D51B-4C35-B96D-7406D19A0840}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C32ABB7-D51B-4C35-B96D-7406D19A0840}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C32ABB7-D51B-4C35-B96D-7406D19A0840}.Release|Any CPU.Build.0 = Release|Any CPU
 		{76EA4D52-0A69-454B-9DA8-2384814F0279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76EA4D52-0A69-454B-9DA8-2384814F0279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76EA4D52-0A69-454B-9DA8-2384814F0279}.Release|Any CPU.ActiveCfg = Release|Any CPU
