@@ -49,12 +49,27 @@
     <Compile Include="..\Facility\ErrorConfigurationProvider.cs">
       <Link>ErrorConfigurationProvider.cs</Link>
     </Compile>
+    <Compile Include="AcquireVanilla.cs" />
+    <Compile Include="AcquireVanillaHandler.cs" />
+    <Compile Include="BlendingPolicy.cs" />
+    <Compile Include="BlendingPolicyData.cs" />
+    <Compile Include="Communicator.cs" />
+    <Compile Include="IVanillaService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vanilla.cs" />
+    <Compile Include="VanillaAcquired.cs" />
+    <Compile Include="VanillaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{84524CE0-CD9F-4F8B-A814-C98020E5C4E5}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

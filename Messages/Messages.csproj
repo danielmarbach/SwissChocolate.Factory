@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="BeansGround.cs" />
     <Compile Include="BeansRoasted.cs" />
+    <Compile Include="BlendChocolate.cs" />
+    <Compile Include="ChocolateBlended.cs" />
     <Compile Include="GrindBeans.cs" />
     <Compile Include="ProduceChocolateBar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

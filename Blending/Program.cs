@@ -4,7 +4,6 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
-using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
@@ -38,22 +37,4 @@ namespace Blending
             serviceHost.Close();
         }
     }
-
-    public class VanillaService : IVanillaService
-    {
-        public async Task<Vanilla> GetVanilla()
-        {
-            await Task.Delay(1000).ConfigureAwait(false);
-            return new Vanilla();
-        }
-    }
-
-    [ServiceContract]
-    public interface IVanillaService
-    {
-        [OperationContract]
-        Task<Vanilla> GetVanilla();
-    }
-
-    public class Vanilla { }
 }

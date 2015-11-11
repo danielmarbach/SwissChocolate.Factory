@@ -37,6 +37,8 @@ namespace Facility
 
         public void Handle(BeansGround message)
         {
+            Console.WriteLine($"['{message.LotNumber}'] Start blending");
+            Bus.Send(new BlendChocolate { LotNumber = Data.LotNumber });
         }
     }
 }
