@@ -54,6 +54,7 @@
     <Compile Include="BlendingPolicy.cs" />
     <Compile Include="BlendingPolicyData.cs" />
     <Compile Include="Communicator.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="IVanillaService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

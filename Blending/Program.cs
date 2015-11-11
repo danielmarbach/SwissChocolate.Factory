@@ -15,7 +15,7 @@ namespace Blending
         {
             var serviceHost = new ServiceHost(typeof (VanillaService));
             serviceHost.AddServiceEndpoint(typeof (IVanillaService), new NetTcpBinding(),
-                "net.tcp://localhost:9010/VanillaService");
+                Constants.VanillaServiceAddress.Uri);
             serviceHost.Open();
 
             DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
@@ -28,9 +28,6 @@ namespace Blending
             configuration.UsePersistence<InMemoryPersistence>();
 
             var bus = Bus.Create(configuration).Start();
-
-            //var factory = new ChannelFactory<IVanillaService>();
-            //var client = factory.CreateChannel(new EndpointAddress("net.tcp://localhost:9010/VanillaService"));
 
             Console.ReadLine();
 

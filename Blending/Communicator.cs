@@ -11,7 +11,7 @@ namespace Blending
 
         public Task<Vanilla> AcquireVanilla()
         {
-            var client = factory.CreateChannel(new EndpointAddress("net.tcp://localhost:9010/VanillaService"));
+            var client = factory.CreateChannel(Constants.VanillaServiceAddress);
             return client.GetVanilla();
         } 
     }
