@@ -11,6 +11,7 @@ namespace Blending
     {
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<BlendingPolicyData> mapper)
         {
+            mapper.ConfigureMapping<BlendChocolate>(m => m.LotNumber).ToSaga(s => s.LotNumber);
         }
 
         public void Handle(BlendChocolate message)
