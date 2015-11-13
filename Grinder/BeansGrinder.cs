@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Messages;
 using NServiceBus;
 
@@ -6,25 +7,23 @@ namespace Grinding
 {
     public class BeansGrinder : IHandleMessages<GrindBeans>
     {
-        public IBus Bus { get; set; }
-
-        public void Handle(GrindBeans message)
+        public async Task Handle(GrindBeans message, IMessageHandlerContext context)
         {
             Console.WriteLine($"['{message.LotNumber}' - Handler] Grinding beans");
             Console.WriteLine($"['{message.LotNumber}' - Handler] Liquifying beans");
 
-            if (message.LotNumber%2 == 0)
+            if (message.LotNumber % 2 == 0)
             {
                 Console.WriteLine($"['{message.LotNumber}' - Handler] Producing cocoa solid");
-                Bus.SendLocal(new ProduceCocoaSolid { LotNumber = message.LotNumber });
+                await context.SendLocalAsync(new ProduceCocoaSolid { LotNumber = message.LotNumber });
             }
             else
             {
                 Console.WriteLine($"['{message.LotNumber}' - Handler] Producing cocoa butter");
-                Bus.SendLocal(new ProduceCocoaButter { LotNumber = message.LotNumber });
+                await context.SendLocalAsync(new ProduceCocoaButter { LotNumber = message.LotNumber });
             }
-            
-            Bus.Publish(new BeansGround { LotNumber = message.LotNumber });
+
+            await context.PublishAsync(new BeansGround { LotNumber = message.LotNumber });
         }
     }
 }

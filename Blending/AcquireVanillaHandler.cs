@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using NServiceBus;
 
 namespace Blending
@@ -14,23 +15,21 @@ namespace Blending
             this.communicator = communicator;
         }
 
-        public IBus Bus { get; set; }
-
-        public void Handle(AcquireVanilla message)
+        public async Task Handle(AcquireVanilla message, IMessageHandlerContext context)
         {
             SpecialConsole.WriteLine($"['{message.LotNumber}' - Handler] Acquire vanilla");
 
-            var vanilla = communicator.AcquireVanilla(message.LotNumber).Result;
+            var vanilla = await communicator.AcquireVanilla(message.LotNumber);
 
             using (var transaction = vanillaContext.Database.BeginTransaction())
             {
                 vanillaContext.Usages.Add(new VanillaUsage(message.LotNumber));
 
-                Bus.Reply(new VanillaAcquired { LotNumber = message.LotNumber, Vanilla = vanilla });
+                await context.ReplyAsync(new VanillaAcquired { LotNumber = message.LotNumber, Vanilla = vanilla });
 
                 SpecialConsole.WriteLine($"['{message.LotNumber}' - Handler] Saving vanilla stats");
 
-                vanillaContext.SaveChanges();
+                await vanillaContext.SaveChangesAsync();
 
                 transaction.Commit();
             }

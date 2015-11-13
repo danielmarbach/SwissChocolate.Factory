@@ -17,7 +17,7 @@ namespace Grinding
             configuration.UseTransport<MsmqTransport>();
             configuration.UsePersistence<InMemoryPersistence>();
 
-            var bus = Bus.Create(configuration).Start();
+            var endpoint = Endpoint.StartAsync(configuration).GetAwaiter().GetResult();
 
             Console.ReadLine();
         }

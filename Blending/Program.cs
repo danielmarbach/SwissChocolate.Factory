@@ -29,11 +29,15 @@ namespace Blending
 
             var container = new Container(x =>
             {
-                x.ForConcreteType<VanillaContext>().Configure.SetLifecycleTo(Lifecycles.ThreadLocal);
-                x.ForConcreteType<Communicator>().Configure.SetLifecycleTo(Lifecycles.Transient);
+                x.ForConcreteType<VanillaContext>().Configure.SetLifecycleTo(Lifecycles.Container);
+                x.ForConcreteType<Communicator>().Configure.SetLifecycleTo(Lifecycles.Container);
+                x.For<ChannelFactory<IVanillaService>>().Use(() => new ChannelFactory<IVanillaService>(new NetTcpBinding())).SetLifecycleTo(Lifecycles.Container);
             });
 
             var configuration = new BusConfiguration();
+
+            configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
+
             configuration.EndpointName("Chocolate.Blending");
 
             configuration.Transactions().DoNotWrapHandlersExecutionInATransactionScope();
@@ -41,11 +45,11 @@ namespace Blending
             configuration.UsePersistence<InMemoryPersistence>();
             configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
 
-            var bus = Bus.Create(configuration).Start();
+            var bus = Endpoint.StartAsync(configuration).GetAwaiter().GetResult();
 
             Console.ReadLine();
 
-            bus.Dispose();
+            bus.StopAsync().GetAwaiter().GetResult();
             serviceHost.Close();
         }
     }

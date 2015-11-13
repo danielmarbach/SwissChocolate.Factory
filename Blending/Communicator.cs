@@ -7,12 +7,16 @@ namespace Blending
 {
     public class Communicator
     {
-        static readonly ThreadLocal<ChannelFactory<IVanillaService>> factory = new ThreadLocal<ChannelFactory<IVanillaService>>(() => new ChannelFactory<IVanillaService>(new NetTcpBinding()));
+        private readonly ChannelFactory<IVanillaService> factory;
+
+        public Communicator(ChannelFactory<IVanillaService> factory)
+        {
+            this.factory = factory;
+        }
 
         public Task<Vanilla> AcquireVanilla(int lotNumber)
         {
-            var channelFactory = factory.Value;
-            var client = channelFactory.CreateChannel(Constants.VanillaServiceAddress);
+            var client = factory.CreateChannel(Constants.VanillaServiceAddress);
             return client.GetVanilla(lotNumber);
         } 
     }
