@@ -7,6 +7,6 @@ namespace Blending
     public interface IVanillaService
     {
         [OperationContract]
-        Task<Vanilla> GetVanilla();
+        Task<Vanilla> GetVanilla(int lotNumber);
     }
 }

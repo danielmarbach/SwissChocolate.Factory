@@ -1,3 +1,4 @@
+using System;
 using Messages;
 using NServiceBus;
 using NServiceBus.Saga;
@@ -16,12 +17,16 @@ namespace Blending
         {
             Data.LotNumber = message.LotNumber;
 
+            SpecialConsole.WriteLine($"['{message.LotNumber}' - Policy] Acquiring vanilla");
+
             Bus.SendLocal(new AcquireVanilla { LotNumber = message.LotNumber });
         }
 
         public void Handle(VanillaAcquired message)
         {
-            Bus.Publish(new ChocolateBlended());
+            SpecialConsole.WriteLine($"['{message.LotNumber}' - Policy] Chocolate blended");
+
+            Bus.Publish(new ChocolateBlended { LotNumber = message.LotNumber });
 
             MarkAsComplete();
         }

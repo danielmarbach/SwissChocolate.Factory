@@ -5,15 +5,24 @@ namespace Blending
 {
     public class VanillaUsage
     {
-        public VanillaUsage(DateTimeOffset acquired)
+        internal VanillaUsage()
         {
-            Acquired = acquired;
+        }
+
+        public VanillaUsage(int lotNumber)
+        {
+            Acquired = DateTime.UtcNow;
+            Id = Guid.NewGuid();
+            LotNumber = lotNumber;
         }
 
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public DateTimeOffset Acquired { get; }
+        public DateTime Acquired { get; set; }
+
+        [Required]
+        public int LotNumber { get; set; }
     }
 }

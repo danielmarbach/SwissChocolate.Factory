@@ -7,7 +7,7 @@ namespace Grinding
     {
         public void Handle(ProduceCocoaButter message)
         {
-            Console.WriteLine($"['{message.LotNumber}'] Produced cocoa butter");
+            Console.WriteLine($"['{message.LotNumber}' - Handler] Produced cocoa butter");
         }
     }
 }

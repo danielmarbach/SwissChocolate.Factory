@@ -10,17 +10,17 @@ namespace Grinding
 
         public void Handle(GrindBeans message)
         {
-            Console.WriteLine($"['{message.LotNumber}'] Grinding beans");
-            Console.WriteLine($"['{message.LotNumber}'] Liquifying beans");
+            Console.WriteLine($"['{message.LotNumber}' - Handler] Grinding beans");
+            Console.WriteLine($"['{message.LotNumber}' - Handler] Liquifying beans");
 
             if (message.LotNumber%2 == 0)
             {
-                Console.WriteLine($"['{message.LotNumber}'] Producing cocoa solid");
+                Console.WriteLine($"['{message.LotNumber}' - Handler] Producing cocoa solid");
                 Bus.SendLocal(new ProduceCocoaSolid { LotNumber = message.LotNumber });
             }
             else
             {
-                Console.WriteLine($"['{message.LotNumber}'] Producing cocoa butter");
+                Console.WriteLine($"['{message.LotNumber}' - Handler] Producing cocoa butter");
                 Bus.SendLocal(new ProduceCocoaButter { LotNumber = message.LotNumber });
             }
             

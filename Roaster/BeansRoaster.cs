@@ -10,8 +10,8 @@ namespace Roasting
 
         public void Handle(RoastBeans message)
         {
-            Console.WriteLine($"['{message.LotNumber}'] Roasting beans");
-            Console.WriteLine($"['{message.LotNumber}'] Winnowing beans");
+            Console.WriteLine($"['{message.LotNumber}' - Handler] Roasting beans");
+            Console.WriteLine($"['{message.LotNumber}' - Handler] Winnowing beans");
 
             Bus.Publish(new BeansRoasted { LotNumber = message.LotNumber });
         }

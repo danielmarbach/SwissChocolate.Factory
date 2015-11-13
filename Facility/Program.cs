@@ -20,8 +20,16 @@ namespace Facility
 
             var bus = Bus.Create(configuration).Start();
 
-            var random = new Random();
-            bus.SendLocal(new ProduceChocolateBar { LotNumber = random.Next(1, 9999) });
+
+            var message = new ProduceChocolateBar { LotNumber = 1111 };
+            Console.WriteLine($"Hit enter to produce chocolate bar with lot number {message.LotNumber}");
+            Console.ReadLine();
+            bus.SendLocal(message);
+
+            message = new ProduceChocolateBar { LotNumber = 2222 };
+            Console.WriteLine($"Hit enter to produce chocolate bar with lot number {message.LotNumber}");
+            Console.ReadLine();
+            bus.SendLocal(message);
 
             Console.ReadLine();
         }

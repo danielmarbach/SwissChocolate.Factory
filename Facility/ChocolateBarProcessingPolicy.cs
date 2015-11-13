@@ -12,7 +12,8 @@ namespace Facility
     public class ChocolateBarProcessingPolicy : Saga<ChocolateBarState>, 
         IAmStartedByMessages<ProduceChocolateBar>,
         IHandleMessages<BeansRoasted>,
-        IHandleMessages<BeansGround>
+        IHandleMessages<BeansGround>,
+        IHandleMessages<ChocolateBlended>
     {
         protected override void ConfigureHowToFindSaga(SagaPropertyMapper<ChocolateBarState> mapper)
         {
@@ -25,20 +26,26 @@ namespace Facility
         {
             Data.LotNumber = message.LotNumber;
 
-            Console.WriteLine($"['{message.LotNumber}'] Start roasting");
+            Console.WriteLine($"['{message.LotNumber}' - Policy] Start roasting");
             Bus.Send(new RoastBeans { LotNumber = Data.LotNumber });
         }
 
         public void Handle(BeansRoasted message)
         {
-            Console.WriteLine($"['{message.LotNumber}'] Start grinding");
+            Console.WriteLine($"['{message.LotNumber}' - Policy] Start grinding");
             Bus.Send(new GrindBeans { LotNumber = Data.LotNumber });
         }
 
         public void Handle(BeansGround message)
         {
-            Console.WriteLine($"['{message.LotNumber}'] Start blending");
+            Console.WriteLine($"['{message.LotNumber}' - Policy] Start blending");
             Bus.Send(new BlendChocolate { LotNumber = Data.LotNumber });
+        }
+
+        public void Handle(ChocolateBlended message)
+        {
+            Console.WriteLine($"['{message.LotNumber}' - Policy] Done");
+            MarkAsComplete();
         }
     }
 }

@@ -58,10 +58,12 @@
     <Compile Include="IVanillaService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecialConsole.cs" />
     <Compile Include="Vanilla.cs" />
     <Compile Include="VanillaAcquired.cs" />
     <Compile Include="VanillaContext.cs" />
     <Compile Include="VanillaService.cs" />
+    <Compile Include="VanillaStatsPoller.cs" />
     <Compile Include="VanillaUsage.cs" />
   </ItemGroup>
   <ItemGroup>
