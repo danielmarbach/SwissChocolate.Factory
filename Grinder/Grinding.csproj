@@ -77,10 +77,10 @@
   </Target>
   -->
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')">
       <ItemGroup>
         <Reference Include="NServiceBus.Core">
-          <HintPath>..\packages\NServiceBus\lib\net45\NServiceBus.Core.dll</HintPath>
+          <HintPath>..\packages\NServiceBus\lib\net452\NServiceBus.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

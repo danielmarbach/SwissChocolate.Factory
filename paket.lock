@@ -24,7 +24,6 @@ NUGET
     Microsoft.SqlServer.Compact (4.0.8876.1)
     Microsoft.Web.Infrastructure (1.0.0)
     Newtonsoft.Json (7.0.1)
-    NServiceBus (5.2.9)
     NServiceBus.StructureMap (5.0.1)
       NServiceBus (>= 5.0.0 < 6.0.0)
       structuremap (>= 3.0.5.130 < 4.0.0)
@@ -32,3 +31,6 @@ NUGET
     WebGrease (1.6.0)
       Antlr (>= 3.4.1.9004)
       Newtonsoft.Json (>= 5.0.4)
+  remote: https://www.myget.org/F/particular
+  specs:
+    NServiceBus (6.0.0-unstable1076)
