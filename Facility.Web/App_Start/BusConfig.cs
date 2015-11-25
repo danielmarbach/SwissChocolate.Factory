@@ -9,7 +9,7 @@ namespace Facility.Web
 {
     public static class BusConfig
     {
-        public static void Start()
+        public static ISendOnlyBus Start()
         {
             DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
             defaultFactory.Level(LogLevel.Error);
@@ -24,6 +24,8 @@ namespace Facility.Web
 
             var currentResolver = DependencyResolver.Current;
             DependencyResolver.SetResolver(new SimpleTypeResolver(currentResolver, bus));
+
+            return bus;
         }
 
         private class SimpleTypeResolver : IDependencyResolver
