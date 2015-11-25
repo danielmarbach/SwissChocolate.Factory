@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blending", "Blending\Blendi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facility", "Facility\Facility.csproj", "{FE7B95B1-35B5-48F5-9798-431A8192A1EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facility.Web", "Facility.Web\Facility.Web.csproj", "{39DB20F8-55A0-41E6-B9B6-3C69C6DC0638}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FE7B95B1-35B5-48F5-9798-431A8192A1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE7B95B1-35B5-48F5-9798-431A8192A1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE7B95B1-35B5-48F5-9798-431A8192A1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39DB20F8-55A0-41E6-B9B6-3C69C6DC0638}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39DB20F8-55A0-41E6-B9B6-3C69C6DC0638}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39DB20F8-55A0-41E6-B9B6-3C69C6DC0638}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39DB20F8-55A0-41E6-B9B6-3C69C6DC0638}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

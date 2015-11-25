@@ -4,3 +4,7 @@ source "https://www.myget.org/F/particular/"
 nuget NServiceBus ~> 5.2.8
 nuget NServiceBus.StructureMap
 nuget EntityFramework.SqlServerCompact ~> 6
+nuget Microsoft.AspNet.Mvc ~> 5.2.3
+nuget WebGrease
+nuget JQuery.Validation
+nuget bootstrap

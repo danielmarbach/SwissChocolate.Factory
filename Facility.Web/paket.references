@@ -1,0 +1,6 @@
+NServiceBus
+EntityFramework.SqlServerCompact
+Microsoft.AspNet.Mvc
+WebGrease
+JQuery.Validation
+bootstrap
