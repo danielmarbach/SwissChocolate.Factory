@@ -25,7 +25,7 @@ namespace Blending
             {
                 vanillaContext.Usages.Add(new VanillaUsage(message.LotNumber));
 
-                await context.ReplyAsync(new VanillaAcquired { LotNumber = message.LotNumber, Vanilla = vanilla });
+                await context.Reply(new VanillaAcquired { LotNumber = message.LotNumber, Vanilla = vanilla });
 
                 SpecialConsole.WriteLine($"['{message.LotNumber}' - Handler] Saving vanilla stats");
 

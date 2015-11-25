@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Messages;
 using NServiceBus;
@@ -9,14 +10,14 @@ namespace Facility.Web.Controllers
     {
         static readonly Random Random = new Random();
 
-        private readonly ISendOnlyBus bus;
+        private readonly IBusContext bus;
 
-        public HomeController(ISendOnlyBus bus)
+        public HomeController(IBusContext bus)
         {
             this.bus = bus;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             return View();
         }
@@ -29,11 +30,11 @@ namespace Facility.Web.Controllers
             {
                 var lotNumber = Random.Next(1, 9999);
 
-                bus.Send(new ProduceChocolateBar { LotNumber = lotNumber });
+                await bus.Send(new ProduceChocolateBar { LotNumber = lotNumber });
 
                 context.Productions.Add(new ChocolateProduction(lotNumber));
 
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             return RedirectToAction("Index");

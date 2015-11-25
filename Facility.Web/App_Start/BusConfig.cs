@@ -9,7 +9,7 @@ namespace Facility.Web
 {
     public static class BusConfig
     {
-        public static ISendOnlyBus Start()
+        public static IEndpointInstance Start()
         {
             DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
             defaultFactory.Level(LogLevel.Error);
@@ -20,30 +20,34 @@ namespace Facility.Web
             configuration.UseTransport<MsmqTransport>();
             configuration.UsePersistence<InMemoryPersistence>();
 
-            var bus = Bus.CreateSendOnly(configuration);
+            configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
+
+            configuration.SendOnly();
+
+            var endpointInstance = Endpoint.Start(configuration).GetAwaiter().GetResult();
 
             var currentResolver = DependencyResolver.Current;
-            DependencyResolver.SetResolver(new SimpleTypeResolver(currentResolver, bus));
+            DependencyResolver.SetResolver(new SimpleTypeResolver(currentResolver, endpointInstance));
 
-            return bus;
+            return endpointInstance;
         }
 
         private class SimpleTypeResolver : IDependencyResolver
         {
             private readonly IDependencyResolver dependencyResolver;
-            private readonly ISendOnlyBus bus;
+            private readonly IEndpointInstance endpointInstance;
 
-            public SimpleTypeResolver(IDependencyResolver defaultResolver, ISendOnlyBus bus)
+            public SimpleTypeResolver(IDependencyResolver defaultResolver, IEndpointInstance endpointInstance)
             {
                 dependencyResolver = defaultResolver;
-                this.bus = bus;
+                this.endpointInstance = endpointInstance;
             }
 
             public object GetService(Type serviceType)
             {
                 if (serviceType == typeof (HomeController))
                 {
-                    return new HomeController(bus);
+                    return new HomeController(endpointInstance.CreateBusContext());
                 }
                 return dependencyResolver.GetService(serviceType);
             }

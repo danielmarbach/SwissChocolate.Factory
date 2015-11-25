@@ -45,11 +45,11 @@ namespace Blending
             configuration.UsePersistence<InMemoryPersistence>();
             configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
 
-            var bus = Endpoint.StartAsync(configuration).GetAwaiter().GetResult();
+            var bus = Endpoint.Start(configuration).GetAwaiter().GetResult();
 
             Console.ReadLine();
 
-            bus.StopAsync().GetAwaiter().GetResult();
+            bus.Stop().GetAwaiter().GetResult();
             serviceHost.Close();
         }
     }

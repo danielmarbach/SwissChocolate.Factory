@@ -23,19 +23,19 @@ namespace Facility
             Data.LotNumber = message.LotNumber;
 
             Console.WriteLine($"['{message.LotNumber}' - Policy] Start roasting");
-            return context.SendAsync(new RoastBeans { LotNumber = Data.LotNumber });
+            return context.Send(new RoastBeans { LotNumber = Data.LotNumber });
         }
 
         public Task Handle(BeansRoasted message, IMessageHandlerContext context)
         {
             Console.WriteLine($"['{message.LotNumber}' - Policy] Start grinding");
-            return context.SendAsync(new GrindBeans { LotNumber = Data.LotNumber });
+            return context.Send(new GrindBeans { LotNumber = Data.LotNumber });
         }
 
         public Task Handle(BeansGround message, IMessageHandlerContext context)
         {
             Console.WriteLine($"['{message.LotNumber}' - Policy] Start blending");
-            return context.SendAsync(new BlendChocolate { LotNumber = Data.LotNumber });
+            return context.Send(new BlendChocolate { LotNumber = Data.LotNumber });
         }
 
         public Task Handle(ChocolateBlended message, IMessageHandlerContext context)

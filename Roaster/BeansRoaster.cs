@@ -12,7 +12,7 @@ namespace Roasting
             Console.WriteLine($"['{message.LotNumber}' - Handler] Roasting beans");
             Console.WriteLine($"['{message.LotNumber}' - Handler] Winnowing beans");
 
-            return context.PublishAsync(new BeansRoasted { LotNumber = message.LotNumber });
+            return context.Publish(new BeansRoasted { LotNumber = message.LotNumber });
         }
     }
 }

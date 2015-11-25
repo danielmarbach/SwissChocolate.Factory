@@ -18,7 +18,7 @@ namespace Facility
             configuration.UseTransport<MsmqTransport>();
             configuration.UsePersistence<InMemoryPersistence>();
 
-            var bus = Endpoint.StartAsync(configuration).GetAwaiter().GetResult().CreateBusContext();
+            var bus = Endpoint.Start(configuration).GetAwaiter().GetResult();
 
             Console.ReadLine();
         }

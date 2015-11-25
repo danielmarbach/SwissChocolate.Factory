@@ -7,7 +7,7 @@ namespace Facility.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private ISendOnlyBus bus;
+        private IEndpointInstance endpointInstance;
 
         protected void Application_Start()
         {
@@ -17,14 +17,12 @@ namespace Facility.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             DatabaseConfig.CreateDatabase();
 
-            bus = BusConfig.Start();
+            endpointInstance = BusConfig.Start();
         }
 
-        public override void Dispose()
+        protected void Application_End()
         {
-            bus.Dispose();
-
-            base.Dispose();
+            endpointInstance.Stop().GetAwaiter().GetResult();
         }
     }
 }
