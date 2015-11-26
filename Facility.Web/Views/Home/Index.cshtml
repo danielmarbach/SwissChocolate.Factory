@@ -7,9 +7,13 @@
 </div>
 
 <div class="row">
-    <form method="GET" action="/Produce/Index">
+    <div class="col-xs-12">
+        @using (Html.BeginForm("Produce", "Home", FormMethod.Post))
+        {
         <button type="submit" class="btn btn-default btn-lg">
             <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Produce chocolate
         </button>
-    </form>
+        }
+
+    </div>
 </div>
