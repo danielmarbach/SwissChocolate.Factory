@@ -115,7 +115,6 @@
     <Compile Include="Controllers\ChocolateProduction.cs" />
     <Compile Include="Controllers\EndpointMappingConfiguration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ProduceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

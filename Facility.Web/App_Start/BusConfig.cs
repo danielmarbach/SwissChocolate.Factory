@@ -41,9 +41,9 @@ namespace Facility.Web
 
             public object GetService(Type serviceType)
             {
-                if (serviceType == typeof (ProduceController))
+                if (serviceType == typeof (HomeController))
                 {
-                    return new ProduceController(bus);
+                    return new HomeController(bus);
                 }
                 return dependencyResolver.GetService(serviceType);
             }
