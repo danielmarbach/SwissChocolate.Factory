@@ -17,6 +17,7 @@ namespace Facility.Web.Controllers
             this.bus = bus;
         }
 
+        [HttpPost]
         public ActionResult Index()
         {
             using (var context = new ChocolateContext())
