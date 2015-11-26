@@ -8,3 +8,4 @@ nuget Microsoft.AspNet.Mvc ~> 5.2.3
 nuget WebGrease
 nuget JQuery.Validation
 nuget bootstrap
+nuget Microsoft.AspNet.Web.Optimization

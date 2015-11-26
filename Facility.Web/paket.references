@@ -4,3 +4,4 @@ Microsoft.AspNet.Mvc
 WebGrease
 JQuery.Validation
 bootstrap
+Microsoft.AspNet.Web.Optimization
