@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 
@@ -8,18 +9,31 @@ namespace Grinding
     {
         static void Main(string[] args)
         {
-            DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
-            defaultFactory.Level(LogLevel.Error);
+            RunBus().GetAwaiter().GetResult();
+        }
 
-            var configuration = new BusConfiguration();
-            configuration.EndpointName("Chocolate.Grinding");
+        static async Task RunBus()
+        {
+            IEndpointInstance endpoint = null;
+            try
+            {
+                DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
+                defaultFactory.Level(LogLevel.Error);
 
-            configuration.UseTransport<MsmqTransport>();
-            configuration.UsePersistence<InMemoryPersistence>();
+                var configuration = new BusConfiguration();
+                configuration.EndpointName("Chocolate.Grinding");
 
-            var endpoint = Endpoint.Start(configuration).GetAwaiter().GetResult();
+                configuration.UseTransport<MsmqTransport>();
+                configuration.UsePersistence<InMemoryPersistence>();
 
-            Console.ReadLine();
+                endpoint = await Endpoint.Start(configuration);
+
+                Console.ReadLine();
+            }
+            finally
+            {
+                await endpoint.Stop();
+            }
         }
     }
 }

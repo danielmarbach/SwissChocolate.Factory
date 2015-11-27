@@ -17,7 +17,7 @@ namespace Facility.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             DatabaseConfig.CreateDatabase();
 
-            endpointInstance = BusConfig.Start();
+            endpointInstance = BusConfig.Start().GetAwaiter().GetResult();
         }
 
         protected void Application_End()

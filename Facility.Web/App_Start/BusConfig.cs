@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Facility.Web.Controllers;
 using NServiceBus;
@@ -9,7 +10,7 @@ namespace Facility.Web
 {
     public static class BusConfig
     {
-        public static IEndpointInstance Start()
+        public static async Task<IEndpointInstance> Start()
         {
             DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
             defaultFactory.Level(LogLevel.Error);
@@ -24,7 +25,7 @@ namespace Facility.Web
 
             configuration.SendOnly();
 
-            var endpointInstance = Endpoint.Start(configuration).GetAwaiter().GetResult();
+            var endpointInstance = await Endpoint.Start(configuration);
 
             var currentResolver = DependencyResolver.Current;
             DependencyResolver.SetResolver(new SimpleTypeResolver(currentResolver, endpointInstance));

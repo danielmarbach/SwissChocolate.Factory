@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.IO;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
 using StructureMap;
@@ -13,44 +14,56 @@ namespace Blending
     {
         static void Main(string[] args)
         {
-            // Force DB creation outside of TxScope
-            File.Delete(@".\Vanilla.sdf");
-            Database.SetInitializer(new CreateDatabaseIfNotExists<VanillaContext>());
-            var context = new VanillaContext();
-            context.Database.CreateIfNotExists();
+            RunBus().GetAwaiter().GetResult();
+        }
 
-            var serviceHost = new ServiceHost(typeof(VanillaService));
-            serviceHost.AddServiceEndpoint(typeof(IVanillaService), new NetTcpBinding(),
-                Constants.VanillaServiceAddress.Uri);
-            serviceHost.Open();
-
-            DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
-            defaultFactory.Level(LogLevel.Error);
-
-            var container = new Container(x =>
+        static async Task RunBus()
+        {
+            ServiceHost serviceHost = null;
+            IEndpointInstance endpoint = null;
+            try
             {
-                x.ForConcreteType<VanillaContext>().Configure.SetLifecycleTo(Lifecycles.Container);
-                x.ForConcreteType<Communicator>().Configure.SetLifecycleTo(Lifecycles.Container);
-                x.For<ChannelFactory<IVanillaService>>().Use(() => new ChannelFactory<IVanillaService>(new NetTcpBinding())).SetLifecycleTo(Lifecycles.Container);
-            });
+                // Force DB creation outside of TxScope
+                File.Delete(@".\Vanilla.sdf");
+                Database.SetInitializer(new CreateDatabaseIfNotExists<VanillaContext>());
+                var context = new VanillaContext();
+                context.Database.CreateIfNotExists();
 
-            var configuration = new BusConfiguration();
+                serviceHost = new ServiceHost(typeof(VanillaService));
+                serviceHost.AddServiceEndpoint(typeof(IVanillaService), new NetTcpBinding(),
+                    Constants.VanillaServiceAddress.Uri);
+                serviceHost.Open();
 
-            configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
+                DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
+                defaultFactory.Level(LogLevel.Error);
 
-            configuration.EndpointName("Chocolate.Blending");
+                var container = new Container(x =>
+                {
+                    x.ForConcreteType<VanillaContext>().Configure.SetLifecycleTo(Lifecycles.Container);
+                    x.ForConcreteType<Communicator>().Configure.SetLifecycleTo(Lifecycles.Container);
+                    x.For<ChannelFactory<IVanillaService>>().Use(() => new ChannelFactory<IVanillaService>(new NetTcpBinding())).SetLifecycleTo(Lifecycles.Container);
+                });
 
-            configuration.Transactions().DoNotWrapHandlersExecutionInATransactionScope();
-            configuration.UseTransport<MsmqTransport>();
-            configuration.UsePersistence<InMemoryPersistence>();
-            configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
+                var configuration = new BusConfiguration();
 
-            var bus = Endpoint.Start(configuration).GetAwaiter().GetResult();
+                configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
 
-            Console.ReadLine();
+                configuration.EndpointName("Chocolate.Blending");
 
-            bus.Stop().GetAwaiter().GetResult();
-            serviceHost.Close();
+                configuration.Transactions().DoNotWrapHandlersExecutionInATransactionScope();
+                configuration.UseTransport<MsmqTransport>();
+                configuration.UsePersistence<InMemoryPersistence>();
+                configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
+
+                endpoint = await Endpoint.Start(configuration);
+
+                Console.ReadLine();
+            }
+            finally
+            {
+                await endpoint.Stop();
+                serviceHost.Close();
+            }
         }
     }
 }
