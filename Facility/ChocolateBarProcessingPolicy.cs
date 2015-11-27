@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Messages;
 using NServiceBus;
-using NServiceBus.Saga;
 
 namespace Facility
 {
-    public class ChocolateBarProcessingPolicy : Saga<ChocolateBarState>, 
+    public class ChocolateBarProcessingPolicy : Saga<ChocolateBarState>,
         IAmStartedByMessages<ProduceChocolateBar>,
         IHandleMessages<BeansRoasted>,
         IHandleMessages<BeansGround>,
@@ -22,30 +18,32 @@ namespace Facility
             mapper.ConfigureMapping<BeansGround>(m => m.LotNumber).ToSaga(s => s.LotNumber);
         }
 
-        public void Handle(ProduceChocolateBar message)
+        public Task Handle(ProduceChocolateBar message, IMessageHandlerContext context)
         {
             Data.LotNumber = message.LotNumber;
 
             Console.WriteLine($"['{message.LotNumber}' - Policy] Start roasting");
-            Bus.Send(new RoastBeans { LotNumber = Data.LotNumber });
+            return context.Send(new RoastBeans { LotNumber = Data.LotNumber });
         }
 
-        public void Handle(BeansRoasted message)
+        public Task Handle(BeansRoasted message, IMessageHandlerContext context)
         {
             Console.WriteLine($"['{message.LotNumber}' - Policy] Start grinding");
-            Bus.Send(new GrindBeans { LotNumber = Data.LotNumber });
+            return context.Send(new GrindBeans { LotNumber = Data.LotNumber });
         }
 
-        public void Handle(BeansGround message)
+        public Task Handle(BeansGround message, IMessageHandlerContext context)
         {
             Console.WriteLine($"['{message.LotNumber}' - Policy] Start blending");
-            Bus.Send(new BlendChocolate { LotNumber = Data.LotNumber });
+            return context.Send(new BlendChocolate { LotNumber = Data.LotNumber });
         }
 
-        public void Handle(ChocolateBlended message)
+        public Task Handle(ChocolateBlended message, IMessageHandlerContext context)
         {
             Console.WriteLine($"['{message.LotNumber}' - Policy] Done");
             MarkAsComplete();
+
+            return Task.FromResult(0);
         }
     }
 }

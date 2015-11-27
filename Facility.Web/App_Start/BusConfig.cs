@@ -20,6 +20,10 @@ namespace Facility.Web
             configuration.UseTransport<MsmqTransport>();
             configuration.UsePersistence<InMemoryPersistence>();
 
+            configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
+
+            configuration.SendOnly();
+
             var bus = Bus.CreateSendOnly(configuration);
 
             var currentResolver = DependencyResolver.Current;

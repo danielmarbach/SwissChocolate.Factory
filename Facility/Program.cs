@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Messages;
 using NServiceBus;
 using NServiceBus.Logging;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Facility
 {
@@ -9,18 +11,31 @@ namespace Facility
     {
         static void Main(string[] args)
         {
-            DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
-            defaultFactory.Level(LogLevel.Error);
+            RunBus().GetAwaiter().GetResult();
+        }
 
-            var configuration = new BusConfiguration();
-            configuration.EndpointName("Chocolate.Facility");
+        static async Task RunBus()
+        {
+            IEndpointInstance endpoint = null;
+            try
+            {
+                DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
+                defaultFactory.Level(LogLevel.Error);
 
-            configuration.UseTransport<MsmqTransport>();
-            configuration.UsePersistence<InMemoryPersistence>();
+                var configuration = new BusConfiguration();
+                configuration.EndpointName("Chocolate.Facility");
 
-            var bus = Bus.Create(configuration).Start();
+                configuration.UseTransport<MsmqTransport>();
+                configuration.UsePersistence<InMemoryPersistence>();
 
-            Console.ReadLine();
+                endpoint = await Endpoint.Start(configuration);
+
+                Console.ReadLine();
+            }
+            finally
+            {
+                await endpoint.Stop();
+            }
         }
     }
 }

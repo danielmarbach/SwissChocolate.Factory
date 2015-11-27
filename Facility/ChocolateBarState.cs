@@ -1,10 +1,9 @@
-﻿using NServiceBus.Saga;
+﻿using NServiceBus;
 
 namespace Facility
 {
     public class ChocolateBarState : ContainSagaData
     {
-        [Unique]
         public int LotNumber { get; set; }
     }
 }

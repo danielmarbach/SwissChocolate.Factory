@@ -36,6 +36,8 @@ namespace Blending
             var configuration = new BusConfiguration();
             configuration.EndpointName("Chocolate.Blending");
 
+            configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
+
             configuration.Transactions().DoNotWrapHandlersExecutionInATransactionScope();
             configuration.UseTransport<MsmqTransport>();
             configuration.UsePersistence<InMemoryPersistence>();
