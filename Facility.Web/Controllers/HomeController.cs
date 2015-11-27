@@ -17,14 +17,14 @@ namespace Facility.Web.Controllers
             this.bus = bus;
         }
 
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             return View();
         }
 
         [Route("produce")]
         [HttpPost]
-        public ActionResult Produce()
+        public async Task<ActionResult> Produce()
         {
             using (var context = new ChocolateContext())
             {
