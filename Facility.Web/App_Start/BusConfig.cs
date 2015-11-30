@@ -14,7 +14,7 @@ namespace Facility.Web
             DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
             defaultFactory.Level(LogLevel.Error);
 
-            var configuration = new BusConfiguration();
+            var configuration = new EndpointConfiguration();
             configuration.EndpointName("Chocolate.Facility.Web");
 
             configuration.UseTransport<MsmqTransport>();

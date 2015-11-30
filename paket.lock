@@ -33,4 +33,4 @@ NUGET
       Newtonsoft.Json (>= 5.0.4)
   remote: https://www.myget.org/F/particular
   specs:
-    NServiceBus (6.0.0-unstable1150)
+    NServiceBus (6.0.0-unstable1656)

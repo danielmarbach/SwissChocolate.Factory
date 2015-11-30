@@ -13,7 +13,7 @@ namespace Facility.Web.Controllers
 
         public HomeController(ISendOnlyBus bus)
         {
-            this.bus = bus;
+            this.session = session;
         }
 
         public ActionResult Index()

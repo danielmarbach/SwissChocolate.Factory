@@ -4,6 +4,7 @@ using System.IO;
 using System.ServiceModel;
 using NServiceBus;
 using NServiceBus.Logging;
+using NServiceBus.Settings.NServiceBus;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -38,8 +39,7 @@ namespace Blending
 
             configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
 
-            configuration.Transactions().DoNotWrapHandlersExecutionInATransactionScope();
-            configuration.UseTransport<MsmqTransport>();
+            configuration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.ReceiveOnly);
             configuration.UsePersistence<InMemoryPersistence>();
             configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
 

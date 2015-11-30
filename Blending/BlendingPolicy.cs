@@ -23,11 +23,11 @@ namespace Blending
             await context.SendLocal(new AcquireVanilla { LotNumber = message.LotNumber });
         }
 
-        public void Handle(VanillaAcquired message)
+        public async Task Handle(VanillaAcquired message, IMessageHandlerContext context)
         {
             SpecialConsole.WriteLine($"['{message.LotNumber}' - Policy] Chocolate blended");
 
-            Bus.Publish(new ChocolateBlended { LotNumber = message.LotNumber });
+            await context.Publish(new ChocolateBlended { LotNumber = message.LotNumber });
 
             MarkAsComplete();
         }
