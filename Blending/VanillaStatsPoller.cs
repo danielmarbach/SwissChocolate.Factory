@@ -20,7 +20,7 @@ namespace Blending
             tokenSource = new CancellationTokenSource();
         }
 
-        public Task Start(IBusContext context)
+        public Task Start(IMessageSession session)
         {
             pollingTask = Task.Run(() =>
             {
@@ -38,7 +38,7 @@ namespace Blending
             return Task.FromResult(0);
         }
 
-        public Task Stop(IBusContext context)
+        public Task Stop(IMessageSession session)
         {
             tokenSource.Cancel();
             return pollingTask;

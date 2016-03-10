@@ -10,11 +10,11 @@ namespace Facility.Web.Controllers
     {
         static readonly Random Random = new Random();
 
-        private readonly IBusContext bus;
+        private readonly IMessageSession session;
 
-        public HomeController(IBusContext bus)
+        public HomeController(IMessageSession session)
         {
-            this.bus = bus;
+            this.session = session;
         }
 
         public ActionResult Index()
@@ -30,7 +30,7 @@ namespace Facility.Web.Controllers
             {
                 var lotNumber = Random.Next(1, 9999);
 
-                await bus.Send(new ProduceChocolateBar { LotNumber = lotNumber });
+                await session.Send(new ProduceChocolateBar { LotNumber = lotNumber });
 
                 context.Productions.Add(new ChocolateProduction(lotNumber));
 

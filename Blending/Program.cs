@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using NServiceBus;
 using NServiceBus.Logging;
+using NServiceBus.Settings.NServiceBus;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -44,14 +45,13 @@ namespace Blending
                     x.For<ChannelFactory<IVanillaService>>().Use(() => new ChannelFactory<IVanillaService>(new NetTcpBinding())).SetLifecycleTo(Lifecycles.Container);
                 });
 
-                var configuration = new BusConfiguration();
+                var configuration = new EndpointConfiguration();
 
                 configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
 
                 configuration.EndpointName("Chocolate.Blending");
 
-                configuration.Transactions().DoNotWrapHandlersExecutionInATransactionScope();
-                configuration.UseTransport<MsmqTransport>();
+                configuration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.ReceiveOnly);
                 configuration.UsePersistence<InMemoryPersistence>();
                 configuration.UseContainer<StructureMapBuilder>(c => c.ExistingContainer(container));
 

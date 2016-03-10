@@ -15,7 +15,7 @@ namespace Facility.Web
             DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
             defaultFactory.Level(LogLevel.Error);
 
-            var configuration = new BusConfiguration();
+            var configuration = new EndpointConfiguration();
             configuration.EndpointName("Chocolate.Facility.Web");
 
             configuration.UseTransport<MsmqTransport>();
@@ -36,19 +36,19 @@ namespace Facility.Web
         private class SimpleTypeResolver : IDependencyResolver
         {
             private readonly IDependencyResolver dependencyResolver;
-            private readonly IEndpointInstance endpointInstance;
+            private readonly IMessageSession messageSession;
 
-            public SimpleTypeResolver(IDependencyResolver defaultResolver, IEndpointInstance endpointInstance)
+            public SimpleTypeResolver(IDependencyResolver defaultResolver, IMessageSession messageSession)
             {
                 dependencyResolver = defaultResolver;
-                this.endpointInstance = endpointInstance;
+                this.messageSession = messageSession;
             }
 
             public object GetService(Type serviceType)
             {
                 if (serviceType == typeof (HomeController))
                 {
-                    return new HomeController(endpointInstance.CreateBusContext());
+                    return new HomeController(messageSession);
                 }
                 return dependencyResolver.GetService(serviceType);
             }
