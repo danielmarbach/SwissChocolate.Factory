@@ -1,7 +1,7 @@
 source "https://nuget.org/api/v2"
 source "https://www.myget.org/F/particular/"
 
-nuget NServiceBus 6.0.0-unstable1150
+nuget NServiceBus 6.0.0-unstable1656
 nuget NServiceBus.StructureMap
 nuget EntityFramework.SqlServerCompact ~> 6
 nuget Microsoft.AspNet.Mvc ~> 5.2.3
