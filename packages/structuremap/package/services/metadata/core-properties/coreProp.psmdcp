@@ -3,7 +3,7 @@
   <dc:creator>[Jeremy Miller]</dc:creator>
   <dc:description>StructureMap is a Dependency Injection / Inversion of Control tool for .Net</dc:description>
   <dc:identifier>structuremap</dc:identifier>
-  <version>Some(3.1.6.186)</version>
+  <version>Some(3.1.7.350)</version>
   <keywords />
   <dc:title>structuremap</dc:title>
   <lastModifiedBy>paket</lastModifiedBy>

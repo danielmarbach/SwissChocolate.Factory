@@ -45,11 +45,9 @@ namespace Blending
                     x.For<ChannelFactory<IVanillaService>>().Use(() => new ChannelFactory<IVanillaService>(new NetTcpBinding())).SetLifecycleTo(Lifecycles.Container);
                 });
 
-                var configuration = new EndpointConfiguration();
+                var configuration = new EndpointConfiguration("Chocolate.Blending");
 
                 configuration.ExcludeAssemblies("System.Data.SqlServerCe.dll");
-
-                configuration.EndpointName("Chocolate.Blending");
 
                 configuration.UseTransport<MsmqTransport>().Transactions(TransportTransactionMode.ReceiveOnly);
                 configuration.UsePersistence<InMemoryPersistence>();
@@ -57,7 +55,12 @@ namespace Blending
 
                 endpoint = await Endpoint.Start(configuration);
 
+                var statsPoller = new VanillaStatsPoller(context);
+                await statsPoller.Start(endpoint);
+
                 Console.ReadLine();
+
+                await statsPoller.Stop(endpoint);
             }
             finally
             {

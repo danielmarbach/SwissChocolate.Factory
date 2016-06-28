@@ -73,9 +73,9 @@
             The message to which error relates to.
             </summary>
         </member>
-        <member name="P:NServiceBus.Pipeline.IFaultContext.ErrorQueueAddress">
+        <member name="P:NServiceBus.Pipeline.IFaultContext.SourceQueueAddress">
             <summary>
-            Address of the error queue.
+            Address of the source queue for the faulted message.
             </summary>
         </member>
         <member name="P:NServiceBus.Pipeline.IFaultContext.Exception">
@@ -180,6 +180,12 @@
             <summary>
             Tells if the message has been handled.
             </summary>
+        </member>
+        <member name="M:NServiceBus.Pipeline.IIncomingLogicalMessageContext.UpdateMessageInstance(System.Object)">
+            <summary>
+            Updates the message instance contained in <see cref="T:NServiceBus.Pipeline.LogicalMessage"/>.
+            </summary>
+            <param name="newInstance">The new instance.</param>
         </member>
         <member name="T:NServiceBus.Pipeline.IIncomingPhysicalMessageContext">
             <summary>
@@ -495,6 +501,22 @@
             <param name="newBehavior">The new <see cref="T:NServiceBus.Pipeline.Behavior`1" /> to use.</param>
             <param name="description">The description of the new behavior.</param>
         </member>
+        <member name="M:NServiceBus.Pipeline.PipelineSettings.Replace``1(System.String,``0,System.String)">
+            <summary>
+            Replaces an existing step behavior with a new one.
+            </summary>
+            <param name="stepId">The identifier of the step to replace its implementation.</param>
+            <param name="newBehavior">The new <see cref="T:NServiceBus.Pipeline.Behavior`1" /> to use.</param>
+            <param name="description">The description of the new behavior.</param>
+        </member>
+        <member name="M:NServiceBus.Pipeline.PipelineSettings.Replace``1(System.String,System.Func{NServiceBus.ObjectBuilder.IBuilder,``0},System.String)">
+            <summary>
+            Replaces an existing step behavior with a new one.
+            </summary>
+            <param name="stepId">The identifier of the step to replace its implementation.</param>
+            <param name="factoryMethod">The factory method to create new instances of the behavior.</param>
+            <param name="description">The description of the new behavior.</param>
+        </member>
         <member name="M:NServiceBus.Pipeline.PipelineSettings.Replace(NServiceBus.Pipeline.WellKnownStep,System.Type,System.String)">
             <summary>
             <see cref="M:NServiceBus.Pipeline.PipelineSettings.Replace(System.String,System.Type,System.String)" />.
@@ -718,6 +740,11 @@
             The logical message.
             </summary>
         </member>
+        <member name="M:NServiceBus.Pipeline.LogicalMessage.#ctor(NServiceBus.Unicast.Messages.MessageMetadata,System.Object)">
+            <summary>
+            Create a new <see cref="T:NServiceBus.Pipeline.LogicalMessage"/> instance containg a message object and it's corresponding <see cref="T:NServiceBus.Unicast.Messages.MessageMetadata"/>.
+            </summary>
+        </member>
         <member name="P:NServiceBus.Pipeline.LogicalMessage.MessageType">
             <summary>
             The <see cref="T:System.Type" /> of the message instance.
@@ -833,6 +860,16 @@
             <param name="auditQueue">The name of the audit queue to use.</param>
             <param name="timeToBeReceived">The custom TTR to use for messages sent to the audit queue.</param>
         </member>
+        <member name="T:NServiceBus.Notifications">
+            <summary>
+            Notifications.
+            </summary>
+        </member>
+        <member name="P:NServiceBus.Notifications.Errors">
+            <summary>
+            Push-based error notifications.
+            </summary>
+        </member>
         <member name="T:NServiceBus.ICriticalErrorContext">
             <summary>
             The context of a critical error handler used by <see cref="M:NServiceBus.ConfigureCriticalErrorAction.DefineCriticalErrorAction(NServiceBus.EndpointConfiguration,System.Func{NServiceBus.ICriticalErrorContext,System.Threading.Tasks.Task})"/>.
@@ -853,28 +890,10 @@
             The last <see cref="P:NServiceBus.ICriticalErrorContext.Exception"/> that cause the error.
             </summary>
         </member>
-        <member name="M:NServiceBus.EndpointHelper.GetDefaultEndpointName">
-            <summary>
-            Gets the name of this endpoint
-            </summary>
-            <returns>The name of the endpoint.</returns>
-        </member>
-        <member name="M:NServiceBus.EndpointHelper.GetEndpointVersion">
-            <summary>
-            Gets the version of the endpoint.
-            </summary>
-            <returns>The <see cref="T:System.Version" /> the endpoint.</returns>
-        </member>
         <member name="T:NServiceBus.Endpoint">
             <summary>
             Provides factory methods for creating and starting endpoint instances.
             </summary>
-        </member>
-        <member name="M:NServiceBus.Endpoint.Prepare(NServiceBus.EndpointConfiguration)">
-            <summary>
-            Creates a new initializable endpoint based on the provided configuration.
-            </summary>
-            <param name="configuration">Configuration.</param>
         </member>
         <member name="M:NServiceBus.Endpoint.Create(NServiceBus.EndpointConfiguration)">
             <summary>
@@ -1000,10 +1019,32 @@
             Creates a <see cref="T:NServiceBus.Pipeline.IForwardingContext" /> based on the current context.
             </summary>
         </member>
-        <member name="M:NServiceBus.SerializationFeature.Setup(NServiceBus.Features.FeatureConfigurationContext)">
+        <member name="T:NServiceBus.RoutingMappingSettings">
             <summary>
-            Called when the features is activated.
+            Exposes advanced routing settings.
             </summary>
+        </member>
+        <member name="P:NServiceBus.RoutingMappingSettings.Logical">
+            <summary>
+            Gets the routing table for the direct routing.
+            </summary>
+        </member>
+        <member name="P:NServiceBus.RoutingMappingSettings.Physical">
+            <summary>
+            Gets the known endpoints collection.
+            </summary>
+        </member>
+        <member name="P:NServiceBus.RoutingMappingSettings.Publishers">
+            <summary>
+            Gets the publisher settings.
+            </summary>
+        </member>
+        <member name="M:NServiceBus.RoutingMappingSettings.SetMessageDistributionStrategy(NServiceBus.Routing.DistributionStrategy,System.Func{System.Type,System.Boolean})">
+            <summary>
+            Sets a distribution strategy for a given subset of message types.
+            </summary>
+            <param name="distributionStrategy">The instance of a distribution strategy.</param>
+            <param name="typeMatchingRule">A predicate for determining the set of types.</param>
         </member>
         <member name="T:NServiceBus.Settings.ScaleOutSettings">
             <summary>
@@ -1104,16 +1145,6 @@
             <typeparam name="T">The <typeparamref name="T" /> to locate in the <see cref="T:NServiceBus.Settings.ReadOnlySettings" />.</typeparam>
             <returns>true if the <see cref="T:NServiceBus.Settings.ReadOnlySettings" /> contains an element with the specified key; otherwise, false.</returns>
         </member>
-        <member name="M:NServiceBus.Settings.ReadOnlySettings.ApplyTo``1(NServiceBus.ObjectBuilder.IComponentConfig)">
-            <summary>
-            Setup property injection for the given type based on convention.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.Settings.ReadOnlySettings.ApplyTo(System.Type,NServiceBus.ObjectBuilder.IComponentConfig)">
-            <summary>
-            Setup property injection for the given type based on convention.
-            </summary>
-        </member>
         <member name="T:NServiceBus.Settings.SettingsHolder">
             <summary>
             Setting container.
@@ -1199,16 +1230,6 @@
             </summary>
             <typeparam name="T">The type.</typeparam>
             <returns>True if found.</returns>
-        </member>
-        <member name="M:NServiceBus.Settings.SettingsHolder.ApplyTo``1(NServiceBus.ObjectBuilder.IComponentConfig)">
-            <summary>
-            Applies property inject for the given type based on convention.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.Settings.SettingsHolder.ApplyTo(System.Type,NServiceBus.ObjectBuilder.IComponentConfig)">
-            <summary>
-            Setup property injection for the given type based on convention.
-            </summary>
         </member>
         <member name="M:NServiceBus.Settings.SettingsHolder.Set(System.String,System.Object)">
             <summary>
@@ -1381,6 +1402,16 @@
             </summary>
             <param name="transportAddress">A transport address.</param>
         </member>
+        <member name="M:NServiceBus.Transports.TransportInfrastructure.Start">
+            <summary>
+            Performs any action required to warm up the transport infrastructure before starting the endpoint.
+            </summary>
+        </member>
+        <member name="M:NServiceBus.Transports.TransportInfrastructure.Stop">
+            <summary>
+            Performs any action required to cool down the transport infrastructure when the endpoint is stopping.
+            </summary>
+        </member>
         <member name="T:NServiceBus.Transports.TransportOperations">
             <summary>
             Represents a set of transport operations.
@@ -1448,7 +1479,7 @@
         </member>
         <member name="P:NServiceBus.Transports.StartupCheckResult.Succeeded">
             <summary>
-            Returns weather the result was a succes.
+            Returns weather the result was a success.
             </summary>
         </member>
         <member name="P:NServiceBus.Transports.StartupCheckResult.ErrorMessage">
@@ -1948,62 +1979,6 @@
             The value stored under the key in the header collection.
             </summary>
         </member>
-        <member name="T:NServiceBus.MsmqTransportInfrastructure">
-            <summary>
-            Transport infrastructure for MSMQ.
-            </summary>
-        </member>
-        <member name="P:NServiceBus.MsmqTransportInfrastructure.DeliveryConstraints">
-            <summary>
-            <see cref="P:NServiceBus.Transports.TransportInfrastructure.DeliveryConstraints" />.
-            </summary>
-        </member>
-        <member name="P:NServiceBus.MsmqTransportInfrastructure.TransactionMode">
-            <summary>
-            <see cref="P:NServiceBus.Transports.TransportInfrastructure.TransactionMode" />.
-            </summary>
-        </member>
-        <member name="P:NServiceBus.MsmqTransportInfrastructure.OutboundRoutingPolicy">
-            <summary>
-            <see cref="P:NServiceBus.Transports.TransportInfrastructure.OutboundRoutingPolicy" />.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.MsmqTransportInfrastructure.BindToLocalEndpoint(NServiceBus.Routing.EndpointInstance)">
-            <summary>
-            Returns the discriminator for this endpoint instance.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.MsmqTransportInfrastructure.ToTransportAddress(NServiceBus.LogicalAddress)">
-            <summary>
-            <see cref="M:NServiceBus.Transports.TransportInfrastructure.ToTransportAddress(NServiceBus.LogicalAddress)" />.
-            </summary>
-            <param name="logicalAddress">The logical address.</param>
-            <returns>The transport address.</returns>
-        </member>
-        <member name="M:NServiceBus.MsmqTransportInfrastructure.MakeCanonicalForm(System.String)">
-            <summary>
-            <see cref="M:NServiceBus.Transports.TransportInfrastructure.MakeCanonicalForm(System.String)" />.
-            </summary>
-            <param name="transportAddress">A transport address.</param>
-        </member>
-        <member name="M:NServiceBus.MsmqTransportInfrastructure.ConfigureReceiveInfrastructure">
-            <summary>
-            <see cref="M:NServiceBus.Transports.TransportInfrastructure.ConfigureReceiveInfrastructure" />.
-            </summary>
-            <returns>Transport receive infrastructure.</returns>
-        </member>
-        <member name="M:NServiceBus.MsmqTransportInfrastructure.ConfigureSendInfrastructure">
-            <summary>
-            <see cref="M:NServiceBus.Transports.TransportInfrastructure.ConfigureSendInfrastructure" />.
-            </summary>
-            <returns>Transport send infrastructure.</returns>
-        </member>
-        <member name="M:NServiceBus.MsmqTransportInfrastructure.ConfigureSubscriptionInfrastructure">
-            <summary>
-            <see cref="M:NServiceBus.Transports.TransportInfrastructure.ConfigureSubscriptionInfrastructure" />.
-            </summary>
-            <returns>Transport subscription infrastructure.</returns>
-        </member>
         <member name="T:NServiceBus.CriticalErrorContext">
             <summary>
             See <see cref="T:NServiceBus.ICriticalErrorContext" />.
@@ -2037,9 +2012,15 @@
             Configuration used to create an endpoint instance.
             </summary>
         </member>
-        <member name="M:NServiceBus.EndpointConfiguration.#ctor">
+        <member name="M:NServiceBus.EndpointConfiguration.#ctor(System.String)">
             <summary>
-            Initializes a fresh instance of the builder.
+            Initializes the endpoint configuration builder.
+            </summary>
+            <param name="endpointName">The name of the endpoint being configured.</param>
+        </member>
+        <member name="P:NServiceBus.EndpointConfiguration.Notifications">
+            <summary>
+            Access to the current endpoint <see cref="P:NServiceBus.EndpointConfiguration.Notifications"/>.
             </summary>
         </member>
         <member name="P:NServiceBus.EndpointConfiguration.Pipeline">
@@ -2077,11 +2058,6 @@
             Overrides the default configuration source.
             </summary>
         </member>
-        <member name="M:NServiceBus.EndpointConfiguration.EndpointName(System.String)">
-            <summary>
-            Defines the name to use for this endpoint.
-            </summary>
-        </member>
         <member name="M:NServiceBus.EndpointConfiguration.Conventions">
             <summary>
             Defines the conventions to use for this endpoint.
@@ -2104,12 +2080,6 @@
             Uses an already active instance of a builder.
             </summary>
             <param name="builder">The instance to use.</param>
-        </member>
-        <member name="M:NServiceBus.EndpointConfiguration.RunWhenEndpointStartsAndStops(NServiceBus.IWantToRunWhenBusStartsAndStops)">
-            <summary>
-            Register specific instance to run when endpoint starts and stops.
-            </summary>
-            <param name="callbackObject">Callback object.</param>
         </member>
         <member name="M:NServiceBus.EndpointConfiguration.OverridePublicReturnAddress(System.String)">
             <summary>
@@ -3066,20 +3036,6 @@
             <param name="context">Object being extended.</param>
             <param name="messageConstructor">An action which initializes properties of the message.</param>
         </member>
-        <member name="T:NServiceBus.ConfigureHandlerSettings">
-            <summary>
-            Extension methods for injecting props in <see cref="T:NServiceBus.IHandleMessages`1" />.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.ConfigureHandlerSettings.InitializeHandlerProperty``1(NServiceBus.EndpointConfiguration,System.String,System.Object)">
-            <summary>
-            Initializes <see cref="T:NServiceBus.IHandleMessages`1" /> with the specified properties.
-            </summary>
-            <typeparam name="THandler">The <see cref="T:NServiceBus.IHandleMessages`1" /> type.</typeparam>
-            <param name="config">The <see cref="T:NServiceBus.EndpointConfiguration" /> instance to apply the settings to.</param>
-            <param name="property">The property name to be injected.</param>
-            <param name="value">The value to assign to the <paramref name="property" />.</param>
-        </member>
         <member name="T:NServiceBus.ConsistencyGuarantees.TransactionModeSettingsExtensions">
             <summary>
             Extension methods to provide access to various consistency releated convenience methods.
@@ -3183,17 +3139,17 @@
         </member>
         <member name="M:NServiceBus.Persistence.PersistenceDefinition.Supports``1(System.Action{NServiceBus.Settings.SettingsHolder})">
             <summary>
-            Used be the storage definitions to declare what they support.
+            Used by the storage definitions to declare what they support.
             </summary>
         </member>
         <member name="M:NServiceBus.Persistence.PersistenceDefinition.Supports(NServiceBus.Persistence.Storage,System.Action{NServiceBus.Settings.SettingsHolder})">
             <summary>
-            Used be the storage definitions to declare what they support.
+            Used by the storage definitions to declare what they support.
             </summary>
         </member>
         <member name="M:NServiceBus.Persistence.PersistenceDefinition.Defaults(System.Action{NServiceBus.Settings.SettingsHolder})">
             <summary>
-            Used be the storage definitions to declare what they support.
+            Used by the storage definitions to declare what they support.
             </summary>
         </member>
         <member name="M:NServiceBus.Persistence.PersistenceDefinition.HasSupportFor(NServiceBus.Persistence.Storage)">
@@ -3399,16 +3355,6 @@
         <member name="P:NServiceBus.Config.Logging.Threshold">
             <summary>
             The minimal logging level above which all calls to the log will be written.
-            </summary>
-        </member>
-        <member name="T:NServiceBus.Config.MasterNodeConfig">
-            <summary>
-            Configuration section for holding the node which is the master.
-            </summary>
-        </member>
-        <member name="P:NServiceBus.Config.MasterNodeConfig.Node">
-            <summary>
-            The node .
             </summary>
         </member>
         <member name="T:NServiceBus.Config.MessageEndpointMapping">
@@ -3813,21 +3759,21 @@
             Manages the information about publishers.
             </summary>
         </member>
-        <member name="M:NServiceBus.Routing.MessageDrivenSubscriptions.Publishers.AddStatic(NServiceBus.Routing.EndpointName,System.Type)">
+        <member name="M:NServiceBus.Routing.MessageDrivenSubscriptions.Publishers.Add(System.String,System.Type)">
             <summary>
-            Registers a publisher for a given endpoint type.
+            Registers a publisher endpoint for a given endpoint type.
             </summary>
             <param name="publisher">Publisher endpoint.</param>
             <param name="eventType">Event type.</param>
         </member>
-        <member name="M:NServiceBus.Routing.MessageDrivenSubscriptions.Publishers.AddStatic(System.String,System.Type)">
+        <member name="M:NServiceBus.Routing.MessageDrivenSubscriptions.Publishers.AddByAddress(System.String,System.Type)">
             <summary>
-            Registers a publisher for a given endpoint type.
+            Registers a publisher address for a given endpoint type.
             </summary>
             <param name="publisherAddress">Publisher physical address.</param>
             <param name="eventType">Event type.</param>
         </member>
-        <member name="M:NServiceBus.Routing.MessageDrivenSubscriptions.Publishers.AddStatic(NServiceBus.Routing.EndpointName,System.Reflection.Assembly,System.String)">
+        <member name="M:NServiceBus.Routing.MessageDrivenSubscriptions.Publishers.Add(System.String,System.Reflection.Assembly,System.String)">
             <summary>
             Registers a publisher for all events in a given assembly (and optionally namespace).
             </summary>
@@ -3863,7 +3809,7 @@
             </summary>
             <param name="dynamicRule">The rule.</param>
         </member>
-        <member name="M:NServiceBus.Routing.EndpointInstances.AddStatic(NServiceBus.Routing.EndpointName,NServiceBus.Routing.EndpointInstance[])">
+        <member name="M:NServiceBus.Routing.EndpointInstances.Add(NServiceBus.Routing.EndpointName,NServiceBus.Routing.EndpointInstance[])">
             <summary>
             Adds static information about an endpoint.
             </summary>
@@ -3898,22 +3844,16 @@
         </member>
         <member name="M:NServiceBus.Routing.UnicastRoutingTable.AddDynamic(System.Func{System.Collections.Generic.List{System.Type},NServiceBus.Extensibility.ContextBag,System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{NServiceBus.Routing.IUnicastRoute}}})">
             <summary>
-            Adds a rule for generating unicast routes.
+            Adds an external provider of routes.
             </summary>
-            <remarks>
-            For dynamic routes that do not require async use
-            <see cref="M:NServiceBus.Routing.UnicastRoutingTable.AddDynamic(System.Func{System.Collections.Generic.List{System.Type},NServiceBus.Extensibility.ContextBag,System.Collections.Generic.IEnumerable{NServiceBus.Routing.IUnicastRoute}})" />.
-            </remarks>
+            <remarks>For dynamic routes that do not require async use <see cref="M:NServiceBus.Routing.UnicastRoutingTable.AddDynamic(System.Func{System.Collections.Generic.List{System.Type},NServiceBus.Extensibility.ContextBag,System.Collections.Generic.IEnumerable{NServiceBus.Routing.IUnicastRoute}})"/>.</remarks>
             <param name="dynamicRule">The rule.</param>
         </member>
         <member name="M:NServiceBus.Routing.UnicastRoutingTable.AddDynamic(System.Func{System.Collections.Generic.List{System.Type},NServiceBus.Extensibility.ContextBag,System.Collections.Generic.IEnumerable{NServiceBus.Routing.IUnicastRoute}})">
             <summary>
-            Adds a rule for generating unicast routes.
+            Adds an external provider of routes.
             </summary>
-            <remarks>
-            For dynamic routes that require async use
-            <see cref="M:NServiceBus.Routing.UnicastRoutingTable.AddDynamic(System.Func{System.Collections.Generic.List{System.Type},NServiceBus.Extensibility.ContextBag,System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{NServiceBus.Routing.IUnicastRoute}}})" />.
-            </remarks>
+            <remarks>For dynamic routes that require async use <see cref="M:NServiceBus.Routing.UnicastRoutingTable.AddDynamic(System.Func{System.Collections.Generic.List{System.Type},NServiceBus.Extensibility.ContextBag,System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{NServiceBus.Routing.IUnicastRoute}}})"/>.</remarks>
             <param name="dynamicRule">The rule.</param>
         </member>
         <member name="T:NServiceBus.Routing.EndpointInstance">
@@ -4217,17 +4157,7 @@
             This method will be called when a message arrives on at the endpoint and should contain
             the custom logic to execute when the message is received.
             </remarks>
-        </member>
-        <member name="T:NServiceBus.IInitializableEndpoint">
-            <summary>
-            Represents an endpoint in the initialize phase.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.IInitializableEndpoint.Initialize">
-            <summary>
-            Initializes this endpoint, performing all the necessary start-up checks preparing the endpoint to start.
-            </summary>
-            <returns>A reference to the endpoint that allows it to start.</returns>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.IEndpointInstance">
             <summary>
@@ -4243,6 +4173,34 @@
             <summary>
             Called when the features is activated.
             </summary>
+        </member>
+        <member name="T:NServiceBus.PendingTransportOperations">
+            <summary>
+            Represents the currently pending transport operations. The transport operations that are collected here will be dispatched in the batched dispatch stage of the pipeline.
+            </summary>
+            <remarks>This class is threadsafe.</remarks>
+        </member>
+        <member name="P:NServiceBus.PendingTransportOperations.Operations">
+            <summary>
+            Gets the currently pending transport operations.
+            </summary>
+        </member>
+        <member name="P:NServiceBus.PendingTransportOperations.HasOperations">
+            <summary>
+            Indicates whether there are transport operations pending.
+            </summary>
+        </member>
+        <member name="M:NServiceBus.PendingTransportOperations.Add(NServiceBus.Transports.TransportOperation)">
+            <summary>
+            Adds a transport operation.
+            </summary>
+            <param name="transportOperation">The transport operation to be added.</param>
+        </member>
+        <member name="M:NServiceBus.PendingTransportOperations.AddRange(System.Collections.Generic.IEnumerable{NServiceBus.Transports.TransportOperation})">
+            <summary>
+            Adds a range of transport operations.
+            </summary>
+            <param name="transportOperations">The transport operations to be added.</param>
         </member>
         <member name="T:NServiceBus.ImmediateDispatchOptionExtensions">
             <summary>
@@ -4548,6 +4506,13 @@
             <summary>
             Message metadata class.
             </summary>
+        </member>
+        <member name="M:NServiceBus.Unicast.Messages.MessageMetadata.#ctor(System.Type,System.Collections.Generic.IEnumerable{System.Type})">
+            <summary>
+            Create a new instance of <see cref="T:NServiceBus.Unicast.Messages.MessageMetadata"/>.
+            </summary>
+            <param name="messageType">The type of the message this metadata belongs to.</param>
+            <param name="messageHierarchy">the hierarchy of all message types implemented by the message this metadata belongs to.</param>
         </member>
         <member name="P:NServiceBus.Unicast.Messages.MessageMetadata.MessageType">
             <summary>
@@ -4866,6 +4831,7 @@
             <summary>
             Finds a saga entity of the type T using a message of type M.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task&lt;T&gt; or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.Sagas.IHandleSagaNotFound">
             <summary>
@@ -4879,6 +4845,7 @@
             Implementors will implement this method, likely using an injected IBus
             to send responses to the client who sent the message.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.Sagas.ISagaPersister">
             <summary>
@@ -4964,21 +4931,21 @@
             True if no saga instance could be found for this message.
             </summary>
         </member>
+        <member name="P:NServiceBus.Sagas.ActiveSagaInstance.Created">
+            <summary>
+            UTC timestamp of when the active saga instance was created.
+            </summary>
+        </member>
+        <member name="P:NServiceBus.Sagas.ActiveSagaInstance.Modified">
+            <summary>
+            UTC timestamp of when the active saga instance was last modified.
+            </summary>
+        </member>
         <member name="M:NServiceBus.Sagas.ActiveSagaInstance.AttachNewEntity(NServiceBus.IContainSagaData)">
             <summary>
             Provides a way to update the actual saga entity.
             </summary>
             <param name="sagaEntity">The new entity.</param>
-        </member>
-        <member name="T:NServiceBus.PublishersSettingsExtensions">
-            <summary>
-            Allows to configure publishers.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.PublishersSettingsExtensions.Publishers(NServiceBus.EndpointConfiguration)">
-            <summary>
-            Gets the publisher settings.
-            </summary>
         </member>
         <member name="T:NServiceBus.FileRoutingTableSettings">
             <summary>
@@ -5000,7 +4967,7 @@
             <summary>
             Specifies the maximum number of attempts to load contents of a file before logging an error.
             </summary>
-            <param name="maxLoadAttempts">Max load attepts.</param>
+            <param name="maxLoadAttempts">Max load attempts.</param>
         </member>
         <member name="T:NServiceBus.SerializationContextExtensions">
             <summary>
@@ -5051,36 +5018,46 @@
             The transport enlists its receive operation in a transaction scope allowing other resource managers to participate.
             </summary>
         </member>
-        <member name="T:NServiceBus.RoutingSettings">
+        <member name="T:NServiceBus.UnicastRoutingSettings">
             <summary>
             Exposes settings related to routing.
             </summary>
         </member>
-        <member name="P:NServiceBus.RoutingSettings.UnicastRoutingTable">
+        <member name="M:NServiceBus.UnicastRoutingSettings.RouteToEndpoint(System.Type,System.String)">
             <summary>
-            Gets the routing table for the direct routing.
+            Adds a static unicast route.
             </summary>
+            <param name="messageType">Message type.</param>
+            <param name="destination">Destination endpoint.</param>
         </member>
-        <member name="P:NServiceBus.RoutingSettings.EndpointInstances">
+        <member name="M:NServiceBus.UnicastRoutingSettings.AddPublisher(System.String,System.Type)">
             <summary>
-            Gets the known endpoints collection.
+            Registers a publisherEndpoint endpoint for a given endpoint type.
             </summary>
+            <param name="publisherEndpoint">Publisher endpoint.</param>
+            <param name="eventType">Event type.</param>
         </member>
-        <member name="M:NServiceBus.RoutingSettings.SetMessageDistributionStrategy(NServiceBus.Routing.DistributionStrategy,System.Func{System.Type,System.Boolean})">
+        <member name="M:NServiceBus.UnicastRoutingSettings.AddPublisher(System.String,System.Reflection.Assembly,System.String)">
             <summary>
-            Sets a distribution strategy for a given subset of message types.
+            Registers a publisherEndpoint for all events in a given assembly (and optionally namespace).
             </summary>
-            <param name="distributionStrategy">The instance of a distribution strategy.</param>
-            <param name="typeMatchingRule">A predicate for determining the set of types.</param>
+            <param name="publisherEndpoint">Publisher endpoint.</param>
+            <param name="eventAssembly">Assembly containing events.</param>
+            <param name="eventNamespace">Optional namespace containing events.</param>
+        </member>
+        <member name="P:NServiceBus.UnicastRoutingSettings.Mapping">
+            <summary>
+            Allows customizing advanced routing settings.
+            </summary>
         </member>
         <member name="T:NServiceBus.RoutingSettingsExtensions">
             <summary>
             Configuration extensions for routing.
             </summary>
         </member>
-        <member name="M:NServiceBus.RoutingSettingsExtensions.Routing(NServiceBus.EndpointConfiguration)">
+        <member name="M:NServiceBus.RoutingSettingsExtensions.UnicastRouting(NServiceBus.Configuration.AdvanceExtensibility.ExposeSettings)">
             <summary>
-            Gets the routing table for the direct routing.
+            Controls the unicast routing.
             </summary>
         </member>
         <member name="T:NServiceBus.Container.ContainerCustomizations">
@@ -5107,8 +5084,14 @@
         </member>
         <member name="T:NServiceBus.ConventionsBuilder">
             <summary>
-            Conventions builder class.
+            Defines custom message conventions instead of using the <see cref="T:NServiceBus.IMessage"/>, <see cref="T:NServiceBus.IEvent"/> or <see cref="T:NServiceBus.ICommand"/> interfaces, and other conventions.
             </summary>
+        </member>
+        <member name="M:NServiceBus.ConventionsBuilder.#ctor(NServiceBus.Settings.SettingsHolder)">
+            <summary>
+            Creates a new instance of ConventionsBuilder class.
+            </summary>
+            <param name="settings">An instance of the current settings.</param>
         </member>
         <member name="M:NServiceBus.ConventionsBuilder.DefiningMessagesAs(System.Func{System.Type,System.Boolean})">
             <summary>
@@ -5133,6 +5116,11 @@
         <member name="M:NServiceBus.ConventionsBuilder.DefiningDataBusPropertiesAs(System.Func{System.Reflection.PropertyInfo,System.Boolean})">
             <summary>
             Sets the function to be used to evaluate whether a property should be sent via the DataBus or not.
+            </summary>
+        </member>
+        <member name="P:NServiceBus.ConventionsBuilder.Conventions">
+            <summary>
+            The defined <see cref="P:NServiceBus.ConventionsBuilder.Conventions"/>.
             </summary>
         </member>
         <member name="T:NServiceBus.CorrelationContextExtensions">
@@ -5518,6 +5506,11 @@
             Tries to retrieves an instance of <typeparamref name="T" /> from a <see cref="T:NServiceBus.Extensibility.ContextBag" />.
             </summary>
         </member>
+        <member name="M:NServiceBus.DeliveryConstraints.DeliveryConstraintContextExtensions.TryRemoveDeliveryConstraint``1(NServiceBus.Extensibility.ContextBag,``0@)">
+            <summary>
+            Tries to remove an instance of <typeparamref name="T" /> from a <see cref="T:NServiceBus.Extensibility.ContextBag" />.
+            </summary>
+        </member>
         <member name="M:NServiceBus.DeliveryConstraints.DeliveryConstraintContextExtensions.GetDeliveryConstraints(NServiceBus.Extensibility.ContextBag)">
             <summary>
             Removes a <see cref="T:NServiceBus.DeliveryConstraints.DeliveryConstraint" /> to a <see cref="T:NServiceBus.Extensibility.ContextBag" />.
@@ -5546,16 +5539,6 @@
         <member name="P:NServiceBus.EncryptedValue.Base64Iv">
             <summary>
             The initialization vector represented as a Base64 string.
-            </summary>
-        </member>
-        <member name="T:NServiceBus.BusNotifications">
-            <summary>
-            Bus notifications.
-            </summary>
-        </member>
-        <member name="P:NServiceBus.BusNotifications.Errors">
-            <summary>
-            Errors push-based notifications.
             </summary>
         </member>
         <member name="T:NServiceBus.ConfigureError">
@@ -5770,6 +5753,7 @@
             Performs the mutation.
             </summary>
             <param name="context">Contains information about the current message and provides ways to mutate it.</param>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.MessageMutator.MutateOutgoingMessageContext">
             <summary>
@@ -5845,6 +5829,7 @@
             <summary>
             Mutates the given message right after it has been deserialized.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.MessageMutator.IMutateIncomingTransportMessages">
             <summary>
@@ -5856,6 +5841,7 @@
             <summary>
             Modifies various properties of the transport message.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.MessageMutator.IMutateOutgoingMessages">
             <summary>
@@ -5866,6 +5852,7 @@
             <summary>
             Mutates the given message just before it's serialized.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.IDataBusProperty">
             <summary>
@@ -5948,7 +5935,7 @@
             Returns whether <see cref="M:NServiceBus.BestPracticesOptionExtensions.DoNotEnforceBestPractices(NServiceBus.Extensibility.ExtendableOptions)" /> has ben called or
             not.
             </summary>
-            <returns><c>true</c> if best practice enforcment has ben disabled, <c>false</c> otherwhise.</returns>
+            <returns><c>true</c> if best practice enforcement has ben disabled, <c>false</c> otherwise.</returns>
         </member>
         <member name="M:NServiceBus.BestPracticesOptionExtensions.DoNotEnforceBestPractices(NServiceBus.Pipeline.IOutgoingReplyContext)">
             <summary>
@@ -6124,7 +6111,7 @@
             Returns whether the message should be routed to this endpoint.
             </summary>
             <param name="options">Option being extended.</param>
-            <returns><c>true</c> when <see cref="M:NServiceBus.RoutingOptionExtensions.RouteToThisEndpoint(NServiceBus.SendOptions)" /> has been called, <c>false</c> otherwhise.</returns>
+            <returns><c>true</c> when <see cref="M:NServiceBus.RoutingOptionExtensions.RouteToThisEndpoint(NServiceBus.SendOptions)" /> has been called, <c>false</c> otherwise.</returns>
         </member>
         <member name="M:NServiceBus.RoutingOptionExtensions.RouteToThisInstance(NServiceBus.SendOptions)">
             <summary>
@@ -6137,7 +6124,7 @@
             Returns whether the message should be routed to this endpoint instance.
             </summary>
             <param name="options">Option being extended.</param>
-            <returns><c>true</c> when <see cref="M:NServiceBus.RoutingOptionExtensions.IsRoutingToThisInstance(NServiceBus.SendOptions)" /> has been called, <c>false</c> otherwhise.</returns>
+            <returns><c>true</c> when <see cref="M:NServiceBus.RoutingOptionExtensions.IsRoutingToThisInstance(NServiceBus.SendOptions)" /> has been called, <c>false</c> otherwise.</returns>
         </member>
         <member name="M:NServiceBus.RoutingOptionExtensions.RouteToSpecificInstance(NServiceBus.SendOptions,System.String)">
             <summary>
@@ -6250,50 +6237,6 @@
             <param name="key">The static header key.</param>
             <param name="value">The static header value.</param>
         </member>
-        <member name="T:NServiceBus.MsmqAddress">
-            <summary>
-            Abstraction for an address on the NServiceBus network.
-            </summary>
-        </member>
-        <member name="F:NServiceBus.MsmqAddress.Queue">
-            <summary>
-            The (lowercase) name of the queue not including the name of the machine or location depending on the address mode.
-            </summary>
-        </member>
-        <member name="F:NServiceBus.MsmqAddress.Machine">
-            <summary>
-            The (lowercase) name of the machine or the (normal) name of the location depending on the address mode.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.MsmqAddress.Parse(System.String)">
-            <summary>
-            Parses a string and returns an Address.
-            </summary>
-            <param name="address">The full address to parse.</param>
-            <returns>A new instance of <see cref="T:NServiceBus.Address" />.</returns>
-        </member>
-        <member name="M:NServiceBus.MsmqAddress.#ctor(System.String,System.String)">
-            <summary>
-            Instantiate a new Address for a known queue on a given machine.
-            </summary>
-            <param name="queueName">The queue name.</param>
-            <param name="machineName">The machine name.</param>
-        </member>
-        <member name="M:NServiceBus.MsmqAddress.MakeCompatibleWith(NServiceBus.MsmqAddress,System.Func{System.String,System.String})">
-            <summary>
-            Returns an equivalent address which is compatible with a given one with regards to how machine is specified. If a given
-            address has machine specified via IP (as opposed
-            to host name), the new address will also have machine specified via IP.
-            </summary>
-            <param name="other">The address to be compatible with.</param>
-            <param name="ipLookup">The IP address lookup method.</param>
-            <returns></returns>
-        </member>
-        <member name="M:NServiceBus.MsmqAddress.ToString">
-            <summary>
-            Returns a string representation of the address.
-            </summary>
-        </member>
         <member name="T:NServiceBus.MsmqConfigurationExtensions">
             <summary>
             Adds extensions methods to <see cref="T:NServiceBus.TransportExtensions`1" /> for configuration purposes.
@@ -6320,6 +6263,11 @@
             If not specified the default transaction timeout of the machine will be used and the isolation level will be set to
             `ReadCommited`.
             </remarks>
+        </member>
+        <member name="M:NServiceBus.MsmqConfigurationExtensions.DistributeMessagesUsingFileBasedEndpointInstanceMapping(NServiceBus.TransportExtensions{NServiceBus.MsmqTransport},System.String)">
+            <summary>
+            Enables file-based route table source that is automatically refreshed whenever files get updated.
+            </summary>
         </member>
         <member name="T:NServiceBus.HeaderOptionExtensions">
             <summary>
@@ -7007,6 +6955,11 @@
             The number of second-level retries that has been performed for this message.
             </summary>
         </member>
+        <member name="F:NServiceBus.Headers.RetriesTimestamp">
+            <summary>
+            The time the last second-level retry has been performed for this message.
+            </summary>
+        </member>
         <member name="F:NServiceBus.Headers.FLRetries">
             <summary>
             The number of first-level retries that has been performed for this message.
@@ -7358,7 +7311,7 @@
             Extension methods to configure dynamic routing.
             </summary>
         </member>
-        <member name="M:NServiceBus.FileBasedRoutingConfigurationExtensions.UseFileBasedEndpointInstanceMapping(NServiceBus.RoutingSettings,System.String)">
+        <member name="M:NServiceBus.FileBasedRoutingConfigurationExtensions.DistributeMessagesUsingFileBasedEndpointInstanceMapping(NServiceBus.RoutingMappingSettings,System.String)">
             <summary>
             Enables file-based route table source that is automatically refreshed whenever files get updated.
             </summary>
@@ -7711,22 +7664,6 @@
             </summary>
             <returns>A reference to the endpoint.</returns>
         </member>
-        <member name="T:NServiceBus.IWantToRunWhenBusStartsAndStops">
-            <summary>
-            Implementers will be invoked when the endpoint starts up.
-            Dependency injection is provided for these types.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.IWantToRunWhenBusStartsAndStops.Start(NServiceBus.IMessageSession)">
-            <summary>
-            Method called at startup.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.IWantToRunWhenBusStartsAndStops.Stop(NServiceBus.IMessageSession)">
-            <summary>
-            Method called on shutdown.
-            </summary>
-        </member>
         <member name="T:NServiceBus.Conventions">
             <summary>
             Message convention definitions.
@@ -7919,6 +7856,7 @@
             <summary>
             Called when the timeout has expired.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.Saga">
             <summary>
@@ -8141,11 +8079,6 @@
             <see cref="M:NServiceBus.Features.Feature.Setup(NServiceBus.Features.FeatureConfigurationContext)" />.
             </summary>
         </member>
-        <member name="T:NServiceBus.RootContext">
-            <summary>
-            The root context.
-            </summary>
-        </member>
         <member name="T:NServiceBus.ConfigureCriticalErrorAction">
             <summary>
             Allow override critical error action.
@@ -8322,22 +8255,6 @@
             <param name="connectionString">The connection string.</param>
             <returns>the transport infrastructure for msmq.</returns>
         </member>
-        <member name="T:NServiceBus.MsmqUtilities">
-            <summary>
-            MSMQ-related utility functions
-            </summary>
-        </member>
-        <member name="M:NServiceBus.MsmqUtilities.ExtractHeaders(System.Messaging.Message)">
-            <summary>
-            Converts an MSMQ message to a TransportMessage.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.MsmqUtilities.Convert(NServiceBus.Transports.OutgoingMessage,System.Collections.Generic.IEnumerable{NServiceBus.DeliveryConstraints.DeliveryConstraint})">
-            <summary>
-            Converts a TransportMessage to an Msmq message.
-            Doesn't set the ResponseQueue of the result.
-            </summary>
-        </member>
         <member name="T:NServiceBus.DateTimeExtensions">
             <summary>
             Common date time extensions.
@@ -8372,7 +8289,7 @@
         </member>
         <member name="F:NServiceBus.DependencyLifecycle.InstancePerCall">
             <summary>
-            A new instance will be returned fro each call.
+            A new instance will be returned for each call.
             </summary>
         </member>
         <member name="T:NServiceBus.IEncryptionService">
@@ -8481,17 +8398,6 @@
             Generates a concrete implementation of the given type if it is an interface.
             </summary>
         </member>
-        <member name="T:NServiceBus.CommonObjectBuilder">
-            <summary>
-            Implementation of IBuilder, serving as a facade that container specific implementations
-            of IContainer should run behind.
-            </summary>
-        </member>
-        <member name="P:NServiceBus.CommonObjectBuilder.Container">
-            <summary>
-            The container that will be used to create objects and configure components.
-            </summary>
-        </member>
         <member name="T:NServiceBus.ObjectBuilder.Common.IContainer">
             <summary>
             Abstraction of a container.
@@ -8533,15 +8439,6 @@
             <typeparam name="T">Type to be configured.</typeparam>
             <param name="component"><see cref="T:System.Func`1" /> to use to configure.</param>
             <param name="dependencyLifecycle">The desired lifecycle for this type.</param>
-        </member>
-        <member name="M:NServiceBus.ObjectBuilder.Common.IContainer.ConfigureProperty(System.Type,System.String,System.Object)">
-            <summary>
-            Sets the value to be configured for the given property of the
-            given component type.
-            </summary>
-            <param name="component">The interface type.</param>
-            <param name="property">The property name to be injected.</param>
-            <param name="value">The value to assign to the <paramref name="property" />.</param>
         </member>
         <member name="M:NServiceBus.ObjectBuilder.Common.IContainer.RegisterSingleton(System.Type,System.Object)">
             <summary>
@@ -8620,27 +8517,6 @@
             <param name="typeToBuild">The <see cref="T:System.Type" /> to build.</param>
             <param name="action">The callback to call.</param>
         </member>
-        <member name="T:NServiceBus.ObjectBuilder.IComponentConfig">
-            <summary>
-            Used to configure the values to be set for the various
-            properties on a component.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.ObjectBuilder.IComponentConfig.ConfigureProperty(System.String,System.Object)">
-            <summary>
-            Configures the value of the named property of the component.
-            </summary>
-        </member>
-        <member name="T:NServiceBus.ObjectBuilder.IComponentConfig`1">
-            <summary>
-            Strongly typed version of IComponentConfig.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.ObjectBuilder.IComponentConfig`1.ConfigureProperty(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Object)">
-            <summary>
-            Configures the value of the property like so: <code>ConfigureProperty(o => o.Property, value);</code>.
-            </summary>
-        </member>
         <member name="T:NServiceBus.ObjectBuilder.IConfigureComponents">
             <summary>
             Used to configure components in the container.
@@ -8671,16 +8547,6 @@
         <member name="M:NServiceBus.ObjectBuilder.IConfigureComponents.ConfigureComponent``1(System.Func{NServiceBus.ObjectBuilder.IBuilder,``0},NServiceBus.DependencyLifecycle)">
             <summary>
             Configures the given type, allowing to fluently configure properties.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.ObjectBuilder.IConfigureComponents.ConfigureProperty``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Object)">
-            <summary>
-            Configures the given property of the given type to be injected with the given value.
-            </summary>
-        </member>
-        <member name="M:NServiceBus.ObjectBuilder.IConfigureComponents.ConfigureProperty``1(System.String,System.Object)">
-            <summary>
-            Configures the given property of the given type to be injected with the given value.
             </summary>
         </member>
         <member name="M:NServiceBus.ObjectBuilder.IConfigureComponents.RegisterSingleton(System.Type,System.Object)">
@@ -8966,11 +8832,13 @@
             <summary>
             Called before all message handlers and modules.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="M:NServiceBus.UnitOfWork.IManageUnitsOfWork.End(System.Exception)">
             <summary>
             Called after all message handlers and modules, if an error has occurred the exception will be passed.
             </summary>
+            <exception cref="T:System.Exception">This exception will be thrown if <code>null</code> is returned. Return a Task or mark the method as <code>async</code>.</exception>
         </member>
         <member name="T:NServiceBus.FileVersionRetriever">
             <summary>

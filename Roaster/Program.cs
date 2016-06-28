@@ -20,8 +20,7 @@ namespace Roasting
                 DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
                 defaultFactory.Level(LogLevel.Error);
 
-                var configuration = new EndpointConfiguration();
-                configuration.EndpointName("Chocolate.Roasting");
+                var configuration = new EndpointConfiguration("Chocolate.Roasting");
 
                 configuration.UseTransport<MsmqTransport>();
                 configuration.UsePersistence<InMemoryPersistence>();

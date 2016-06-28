@@ -7,7 +7,7 @@ using NServiceBus;
 
 namespace Blending
 {
-    public class VanillaStatsPoller : IWantToRunWhenBusStartsAndStops
+    public class VanillaStatsPoller
     {
         private readonly VanillaContext vanillaContext;
         private readonly CancellationTokenSource tokenSource;

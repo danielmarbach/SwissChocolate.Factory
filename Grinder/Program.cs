@@ -20,8 +20,7 @@ namespace Grinding
                 DefaultFactory defaultFactory = LogManager.Use<DefaultFactory>();
                 defaultFactory.Level(LogLevel.Error);
 
-                var configuration = new EndpointConfiguration();
-                configuration.EndpointName("Chocolate.Grinding");
+                var configuration = new EndpointConfiguration("Chocolate.Grinding");
 
                 configuration.UseTransport<MsmqTransport>();
                 configuration.UsePersistence<InMemoryPersistence>();
